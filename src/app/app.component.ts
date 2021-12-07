@@ -1,11 +1,12 @@
-import { Component} from '@angular/core';
+import { Component, OnInit} from '@angular/core';
+import { AppareilService } from './services/appareil.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'Angular-one';
   isAuth = false ;
   // lastUpdate =new Date();
@@ -17,31 +18,28 @@ export class AppComponent {
       }, 2000
     );
   });
-  appareils = [
-    {
-      name: 'Machine à laver',
-      status: 'éteint'
-    },
-    {
-      name: 'Sèche-Linge',
-      status: 'allumé'
-    },
-    {
-      name:'Télévision',
-      status:'éteint'
-    }
-  ];
+  appareils: any[] = [];
   
-  constructor() {
+  constructor(private appareilService: AppareilService) {
     setTimeout(
       () => {
         this.isAuth = true;
       }, 4000
     );
   }
-  onAllumer() {
-    console.log('On allume tout');
-  }
+
+ngOnInit(){
+this.appareils = this.appareilService.appareils;
+}
+
+onAllumer() {
+  this.appareilService.switchOnAll();
+}
+
+onEteindre() {
+  this.appareilService.switchOffAll();
+}
+
 }
 function ms(callback: any, arg1: () => void, arg2: number, ms: any) {
   throw new Error('Function not implemented.');
